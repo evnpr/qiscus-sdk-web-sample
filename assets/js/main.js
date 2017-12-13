@@ -33,11 +33,14 @@ $(function () {
         appSidebar.find('ul').prepend(room);
         $('.app-sidebar.chat-stranger').addClass('hidden');
         $('#empty-chat-wrapper').addClass('hidden');
+      },
+      newMessagesCallback: function (data) {
+        loadRoomList();
       }
     }
   });
   // login to qiscus
-  QiscusSDK.core.setUser(userData.userId, userData.secret, userData.username);
+  QiscusSDK.core.setUser(userData.userId, userData.secret, "Qiscus Team");
   // render the widget
   QiscusSDK.render();
 
@@ -89,10 +92,15 @@ $(function () {
     var li = document.createElement('li');
     li.setAttribute('data-id', room.id);
     li.setAttribute('id', 'room-' + room.id);
-    li.setAttribute('data-room-name', room.name);
     var detail = document.createElement('div');
     var name = document.createElement('strong');
-    name.innerText = room.name;
+    if(room.avatar.includes("fbcdn")) {
+      name.innerText = "[FB] "+room.name;
+    }else if(room.avatar.includes("line-cdn")) { 
+      name.innerText = "[LINE] "+room.name;
+    }else {
+      name.innerText = room.name;
+    }
     var lastComment = document.createElement('span');
     lastComment.innerText = room.last_comment_message;
     detail.appendChild(name);
@@ -218,7 +226,7 @@ $(function () {
 
   // Load contact
   $.ajax({
-        url: 'http://dashboard-sample.herokuapp.com/api/contacts',
+        url: 'https://qiscuscs-admin.herokuapp.com/api/contacts',
         method: 'get'
       })
       .done(function (data) {
