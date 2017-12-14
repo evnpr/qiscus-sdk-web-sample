@@ -98,9 +98,13 @@ $(function () {
       name.innerText = "[FB] "+room.name;
     }else if(room.avatar.includes("line-cdn")) { 
       name.innerText = "[LINE] "+room.name;
+    }else if(room.name.includes("Guest")){
+      name.innerText = "[WEB] "+room.name;
     }else {
-      name.innerText = room.name;
+      name.innerText = "[dashboard] " + room.name
+      avatar.setAttribute('src', "https://d1edrlpyc25xu0.cloudfront.net/qiscuscs-5xm3wgs5fc1p/image/upload/qCmdFks9QZ/1513212549-Screen+Shot+2017-12-14+at+07.48.46.png");
     }
+    name.innerText = text_truncate(name.innerText, 25);
     var lastComment = document.createElement('span');
     lastComment.innerText = room.last_comment_message;
     detail.appendChild(name);
@@ -109,6 +113,20 @@ $(function () {
     li.appendChild(detail);
     return li;
   }
+  
+  text_truncate = function(str, length, ending) {
+    if (length == null) {
+      length = 100;
+    }
+    if (ending == null) {
+      ending = '...';
+    }
+    if (str.length > length) {
+      return str.substring(0, length - ending.length) + ending;
+    } else {
+      return str;
+    }
+  };
 
   var $contactList = $('ul.contact-list');
   $('input#search-contact')
